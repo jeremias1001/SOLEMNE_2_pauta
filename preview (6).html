@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Resolución minimalista B/N · Solemne Contabilidad Gerencial</title>
+<style>
+
+:root {
+  --bg:#ffffff;
+  --paper:#ffffff;
+  --ink:#0a0a0a;
+  --muted:#555555;
+  --soft:#f4f4f4;
+  --line:#111111;
+  --line2:#d7d7d7;
+  --ghost:#fafafa;
+}
+* { box-sizing:border-box; }
+html, body {
+  margin:0;
+  height:100%;
+  background:var(--bg);
+  color:var(--ink);
+  font-family:Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  overflow:hidden;
+}
+.deck { height:100vh; width:100vw; position:relative; background:#fff; }
+.slide { display:none; height:100vh; width:100vw; padding:4.2vh 4.8vw; background:#fff; }
+.slide.active { display:block; animation:slideIn .25s ease both; }
+@keyframes slideIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:none; } }
+.slide-inner {
+  max-width:1240px;
+  height:100%;
+  margin:0 auto;
+  display:flex;
+  flex-direction:column;
+  gap:2.2vh;
+  border-left:1px solid #000;
+  padding-left:3vw;
+}
+header { flex:0 0 auto; padding-bottom:1.2vh; border-bottom:1px solid #000; }
+.eyebrow {
+  color:#000;
+  font-size:clamp(11px,1.1vw,14px);
+  letter-spacing:.15em;
+  text-transform:uppercase;
+  margin-bottom:.7rem;
+  font-weight:700;
+}
+h1 {
+  margin:0;
+  font-size:clamp(34px,4.6vw,66px);
+  line-height:.98;
+  letter-spacing:-.045em;
+  max-width:1050px;
+  font-weight:850;
+  color:#000;
+}
+main {
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  gap:2vh;
+  font-size:clamp(18px,1.9vw,27px);
+}
+p { color:var(--muted); line-height:1.42; margin:.25rem 0; }
+.lead { font-size:clamp(22px,2.1vw,32px); color:#222; max-width:860px; }
+.hint { color:#111; border-left:3px solid #111; padding-left:14px; }
+.hero-grid { display:grid; grid-template-columns:1.18fr .82fr; gap:3vw; align-items:center; }
+.big-number {
+  font-size:clamp(70px,12vw,160px);
+  line-height:.9;
+  font-weight:900;
+  color:#000;
+  letter-spacing:-.08em;
+}
+.score-card, .card, .calc-board, .question, .answer-box, .callout, .warning, .talk-track {
+  background:#fff;
+  border:1px solid #000;
+  border-radius:0;
+  padding:20px 24px;
+  box-shadow:none;
+  backdrop-filter:none;
+}
+.score-card { display:flex; flex-direction:column; gap:14px; font-size:clamp(21px,2vw,30px); }
+.score-card div { display:flex; justify-content:space-between; border-bottom:1px solid #000; padding-bottom:10px; }
+.score-card div:last-child { border-bottom:0; }
+.two-col { display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+.three-col { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+.card h3 { margin:0 0 8px; font-size:1.18em; color:#000; }
+.card p { margin:.15rem 0 0; color:#555; }
+.question { border-left:8px solid #000; font-size:clamp(22px,2.2vw,33px); color:#000; font-weight:650; }
+.formula {
+  border:1px solid #000;
+  background:#f6f6f6;
+  color:#000;
+  border-radius:0;
+  padding:16px 22px;
+  font-weight:800;
+  text-align:center;
+  font-size:clamp(20px,2.1vw,31px);
+}
+.big-calc { font-size:clamp(28px,2.9vw,44px); font-weight:850; text-align:center; padding:14px; }
+.calc-board { display:grid; gap:11px; background:#fff; }
+.flow { display:flex; align-items:center; justify-content:center; gap:12px; flex-wrap:wrap; }
+.node { background:#fff; border:1px solid #000; border-radius:0; padding:15px 17px; font-weight:850; }
+.arrow { color:#000; font-weight:900; font-size:1.35em; }
+.timeline { display:flex; flex-direction:column; gap:14px; }
+.titem, .step {
+  display:grid;
+  grid-template-columns:82px 1fr;
+  gap:18px;
+  align-items:center;
+  background:#fff;
+  border:1px solid #000;
+  border-radius:0;
+  padding:15px;
+}
+.titem b, .step b {
+  display:grid;
+  place-items:center;
+  min-height:54px;
+  background:#000;
+  color:#fff;
+  font-weight:900;
+}
+.compare { display:grid; grid-template-columns:1fr 1fr; gap:22px; }
+.bad, .good { padding:24px; border-radius:0; font-size:1.02em; background:#fff; border:1px solid #000; }
+.bad b, .good b { color:#000; }
+.tbl {
+  width:100%;
+  border-collapse:collapse;
+  border-spacing:0;
+  overflow:hidden;
+  border:1px solid #000;
+  border-radius:0;
+  font-size:clamp(16px,1.5vw,23px);
+  background:#fff;
+}
+.tbl th { background:#000; color:#fff; text-align:left; padding:13px 15px; border:1px solid #000; font-weight:800; }
+.tbl td { padding:12px 15px; border:1px solid #000; color:#000; background:#fff; }
+.tbl tr:nth-child(even) td { background:#fafafa; }
+.answer {
+  font-weight:900;
+  color:#000;
+  background:#fff;
+  border:1px solid #000;
+  border-radius:0;
+  padding:2px 7px;
+  display:inline-block;
+  min-width:54px;
+  text-align:center;
+}
+.fragment { opacity:0; visibility:hidden; transform:translateY(8px); transition:opacity .2s ease, transform .2s ease, visibility .2s; }
+.fragment.visible { opacity:1; visibility:visible; transform:none; }
+.callout { border-left:8px solid #000; color:#111; background:#fff; }
+.warning { border-left:8px solid #000; color:#000; background:#f7f7f7; }
+.talk-track { font-size:clamp(22px,2.1vw,32px); border-left:8px solid #000; background:#fff; }
+.error-list { display:flex; flex-direction:column; gap:14px; }
+.error-list div { background:#fff; border:1px solid #000; border-radius:0; padding:17px 21px; }
+.blank-question { background:#fff; border:1px dashed #000; border-radius:0; padding:17px 21px; }
+.longblank { display:inline-block; width:min(680px,65vw); height:1.2em; border-bottom:2px solid #000; vertical-align:middle; }
+.answer-box { color:#000; border-left:8px solid #000; background:#fff; }
+.checklist { display:flex; flex-direction:column; gap:12px; }
+.checklist label { background:#fff; border:1px solid #000; border-radius:0; padding:15px 19px; }
+.checklist input { transform:scale(1.3); margin-right:14px; accent-color:#000; }
+.final-badge { align-self:center; background:#000; color:#fff; padding:17px 26px; border-radius:0; font-size:clamp(26px,2.9vw,42px); font-weight:900; }
+.progress { position:fixed; top:0; left:0; height:5px; background:#000; width:0; z-index:10; transition:width .2s ease; }
+.controls { position:fixed; bottom:18px; left:50%; transform:translateX(-50%); display:flex; align-items:center; gap:10px; background:#fff; border:1px solid #000; border-radius:0; padding:8px 12px; font-size:13px; color:#000; box-shadow:0 4px 18px rgba(0,0,0,.08); }
+.controls button { background:#fff; color:#000; border:1px solid #000; border-radius:0; padding:8px 12px; cursor:pointer; }
+.controls button:hover { background:#000; color:#fff; }
+.counter { min-width:80px; text-align:center; color:#000; font-weight:700; }
+/* Patrón sutil de números: mantiene blanco/negro sin decoración pesada */
+.cover .slide-inner::after,
+.section-title .slide-inner::after {
+  content:"";
+  position:absolute;
+  right:4vw;
+  bottom:5vh;
+  width:22vw;
+  height:22vw;
+  border:1px solid #000;
+  opacity:.08;
+  pointer-events:none;
+}
+@media (max-width:820px) {
+  .hero-grid,.two-col,.three-col,.compare { grid-template-columns:1fr; }
+  .slide { padding:3vh 4vw; }
+  .slide-inner { padding-left:4vw; }
+  .tbl { font-size:14px; }
+  .tbl th,.tbl td { padding:8px; }
+}
+@media print {
+  body { overflow:visible; background:white; color:#111; }
+  .deck { height:auto; }
+  .slide { display:block; height:auto; min-height:100vh; page-break-after:always; color:#111; background:white; }
+  .slide-inner { height:auto; }
+  .fragment { opacity:1!important; visibility:visible!important; transform:none!important; }
+  .controls,.progress { display:none; }
+}
+
+</style>
+</head>
+<body>
+<div class="progress" id="progress"></div>
+<div class="deck" id="deck">
+<section class="slide cover">
+  <div class="slide-inner">
+    <header><div class="eyebrow">ICOM303 · Contabilidad Gerencial · Segunda Solemne</div><h1>Resolución guiada de la Solemne</h1></header>
+    <main>
+<div class="hero-grid">
+  <div>
+    <div class="big-number">100 pts</div>
+    <p class="lead">Clase tipo diapositivas para resolver la prueba paso a paso: ABC, CVU monoproducto, CVU multiproducto y presupuesto.</p>
+    <p class="hint fragment">Haz clic para revelar datos, fórmulas y resultados. Diseño minimalista en blanco y negro.</p>
+  </div>
+  <div class="score-card fragment">
+    <div>ABC <b>30 pts</b></div>
+    <div>CVU Mono <b>30 pts</b></div>
+    <div>CVU Multi <b>30 pts</b></div>
+    <div>Presupuesto <b>10 pts</b></div>
+  </div>
+</div>
+</main>
+  </div>
+</section><section class="slide ">
+  <div class="slide-inner">
+    <header><div class="eyebrow">ICOM303 · Contabilidad Gerencial · Segunda Solemne</div><h1>Cómo usar esta presentación</h1></header>
+    <main>
+<div class="step fragment"><b>1</b><span>Primero mira el enunciado y deja los espacios en blanco.</span></div>
+<div class="step fragment"><b>2</b><span>Haz clic una vez: aparece el dato que debes identificar.</span></div>
+<div class="step fragment"><b>3</b><span>Haz clic otra vez: aparece la fórmula o el cálculo.</span></div>
+<div class="step fragment"><b>4</b><span>Último clic: aparece el resultado final y la interpretación.</span></div>
+<div class="callout fragment">Objetivo: no memorizar números; entender de dónde sale cada número.</div>
+</main>
+  </div>
+</section><section class="slide ">
+  <div class="slide-inner">
+    <header><div class="eyebrow">ICOM303 · Contabilidad Gerencial · Segunda Solemne</div><h1>Mapa de resolución</h1></header>
+    <main>
+<div class="timeline">
+  <div class="titem fragment"><b>1</b><span>ABC: repartir CIF por actividades y llegar a costo unitario.</span></div>
+  <div class="titem fragment"><b>2</b><span>CVU monoproducto: construir precio, variable unitario, MCU, PE y utilidad objetivo.</span></div>
+  <div class="titem fragment"><b>3</b><span>CVU multiproducto: usar mezcla de ventas y MCU ponderado.</span></div>
+  <div class="titem fragment"><b>4</b><span>Presupuesto cíclico: respuestas breves con vocabulario técnico.</span></div>
+</div>
+</main>
+  </div>
+</section><section class="slide ">
+  <div class="slide-inner">
+    <header><div class="eyebrow">ICOM303 · Contabilidad Gerencial · Segunda Solemne</div><h1>Idea madre: ¿qué se está evaluando?</h1></header>
+    <main>
+<div class="two-col">
+  <div class="card fragment"><h3>Costos</h3><p>Asignar bien los recursos consumidos por cada producto.</p></div>
+  <div class="card fragment"><h3>Decisiones</h3><p>Saber cuántas unidades vender, qué precio cobrar y qué utilidad se logra.</p></div>
+</div>
+<div class="formula fragment">La contabilidad gerencial no solo registra: transforma datos en decisiones.</div>
+</main>
+  </div>
+</section><section class="slide section-title">
+  <div class="slide-inner">
+    <header><div class="eyebrow">ICOM303 · Contabilidad Gerencial · Segunda Solemne</div><h1>Caso 1 · ABC: qué problema resuelve</h1></header>
+    <main>
+<div class="question">La empresa produce dos artículos deportivos y quiere saber el costo de cada producto de forma más exacta.</div>
+<div class="compare">
+  <div class="bad fragment"><b>Costeo tradicional</b><br>Puede repartir CIF de forma muy general.</div>
+  <div class="good fragment"><b>ABC</b><br>Reparte CIF según actividades reales consumidas por cada producto.</div>
+</div>
+</main>
+  </div>
+</section><section class="slide ">
+  <div class="slide-inner">
+    <header><div class="eyebrow">ICOM303 · Contabilidad Gerencial · Segunda Solemne</div><h1>ABC: estructura general</h1></header>
+    <main>
+<div class="flow">
+  <div class="node fragment">Actividad</div><div class="arrow fragment">→</div>
+  <div class="node fragment">Costo total</div><div class="arrow fragment">→</div>
+  <div class="node fragment">Driver</div><div class="arrow fragment">→</div>
+  <div class="node fragment">Tasa CIF</div><div class="arrow fragment">→</div>
+  <div class="node fragment">Asignación por producto</div>
+</div>
+<div class="formula fragment">Tasa CIF por actividad = Costo total de la actividad / Total del generador</div>
+<div class="formula fragment">CIF asignado al producto = Tasa CIF × Driver usado por ese producto</div>
+</main>
+  </div>
+</section><section class="slide ">
+  <div class="slide-inner">
+    <header><div class="eyebrow">ICOM303 · Contabilidad Gerencial · Segunda Solemne</div><h1>ABC: datos directos del enunciado</h1></header>
+    <main><table class="tbl "><thead><tr><th>Producto</th><th>Producción</th><th>Materia prima</th><th>Mano de obra</th><th>Costo directo unitario</th></tr></thead><tbody><tr><td>Producto 1</td><td><span class="fragment answer">9.000</span></td><td><span class="fragment answer">$1.050</span></td><td><span class="fragment answer">$2.200</span></td><td><span class="fragment answer">$3.250</span></td></tr><tr><td>Producto 2</td><td><span class="fragment answer">10.300</span></td><td><span class="fragment answer">$1.138,2</span></td><td><span class="fragment answer">$1.430,9</span></td><td><span class="fragment answer">$2.569,1</span></td></tr></tbody></table><div class="callout fragment">Los costos directos ya vienen por unidad. No se reparten: se suman al final.</div></main>
+  </div>
+</section><section class="slide ">
+  <div class="slide-inner">
+    <header><div class="eyebrow">ICOM303 · Contabilidad Gerencial · Segunda Solemne</div><h1>ABC: costos indirectos totales</h1></header>
+    <main><table class="tbl "><thead><tr><th>Actividad</th><th>Costo indirecto total</th></tr></thead><tbody><tr><td>Inspección de calidad</td><td><span class="fragment answer">$2.050.000</span></td></tr><tr><td>Energía</td><td><span class="fragment answer">$1.050.000</span></td></tr><tr><td>Almacenamiento</td><td><span class="fragment answer">$450.000</span></td></tr><tr><td>Total CIF</td><td><span class="fragment answer">$3.550.000</span></td></tr></tbody></table><div class="callout fragment">Estos sí deben distribuirse, porque no están asociados directamente a una unidad específica.</div></main>
+  </div>
+</section><section class="slide ">
+  <div class="slide-inner">
+    <header><div class="eyebrow">ICOM303 · Contabilidad Gerencial · Segunda Solemne</div><h1>ABC: generadores de costo</h1></header>
+    <main><table class="tbl "><thead><tr><th>Actividad</th><th>Driver</th><th>Producto 1</th><th>Producto 2</th><th>Total</th></tr></thead><tbody><tr><td>Inspección</td><td>N° inspecciones</td><td><span class="fragment answer">150</span></td><td><span class="fragment answer">190</span></td><td><span class="fragment answer">340</span></td></tr><tr><td>Energía</td><td>KWh</td><td><span class="fragment answer">800</span></td><td><span class="fragment answer">3.600</span></td><td><span class="fragment answer">4.400</span></td></tr><tr><td>Almacenamiento</td><td>m²</td><td><span class="fragment answer">300</span></td><td><span class="fragment answer">500</span></td><td><span class="fragment answer">800</span></td></tr></tbody></table><div class="callout fragment">El driver explica qué producto consume más de esa actividad.</div></main>
+  </div>
+</section><section class="slide ">
+  <div class="slide-inner">
+    <header><div class="eyebrow">ICOM303 · Contabilidad Gerencial · Segunda Solemne</div><h1>ABC: inspección de calidad</h1></header>
+    <main>
+<div class="calc-board">
+  <div>Actividad: <b>Inspección</b></div>
+  <div>Costo total: <span class="fragment answer">$2.050.000</span></div>
+  <div>Total inspecciones: <span class="fragment answer">340</span></div>
+  <div class="formula fragment">Tasa = 2.050.000 / 340 = $6.029,4 por inspección</div>
+</div>
+<div class="two-col">
+  <div class="card ">Producto 1: 150 × 6.029,4 = <span class="fragment answer">$904.411,8</span></div>
+  <div class="card ">Producto 2: 190 × 6.029,4 = <span class="fragment answer">$1.145.588,2</span></div>
+</div>
+</main>
+  </div>
+</section><section class="slide ">
+  <div class="slide-inner">
+    <header><div class="eyebrow">ICOM303 · Contabilidad Gerencial · Segunda Solemne</div><h1>ABC: energía</h1></header>
+    <main>
+<div class="calc-board">
+  <div>Actividad: <b>Energía</b></div>
+  <div>Costo total: <span class="fragment answer">$1.050.000</span></div>
+  <div>Total KWh: <span class="fragment answer">4.400</span></div>
+  <div class="formula fragment">Tasa = 1.050.000 / 4.400 = $238,6 por KWh</div>
+</div>
+<div class="two-col">
+  <div class="card ">Producto 1: 800 × 238,6 = <span class="fragment answer">$190.909,1</span></div>
+  <div class="card ">Producto 2: 3.600 × 238,6 = <span class="fragment answer">$859.090,9</span></div>
+</div>
+</main>
+  </div>
+</section><section class="slide ">
+  <div class="slide-inner">
+    <header><div class="eyebrow">ICOM303 · Contabilidad Gerencial · Segunda Solemne</div><h1>ABC: almacenamiento</h1></header>
+    <main>
+<div class="calc-board">
+  <div>Actividad: <b>Almacenamiento</b></div>
+  <div>Costo total: <span class="fragment answer">$450.000</span></div>
+  <div>Total m²: <span class="fragment answer">800</span></div>
+  <div class="formula fragment">Tasa = 450.000 / 800 = $562,5 por m²</div>
+</div>
+<div class="two-col">
+  <div class="card ">Producto 1: 300 × 562,5 = <span class="fragment answer">$168.750</span></div>
+  <div class="card ">Producto 2: 500 × 562,5 = <span class="fragment answer">$281.250</span></div>
+</div>
+</main>
+  </div>
+</section><section class="slide ">
+  <div class="slide-inner">
+    <header><div class="eyebrow">ICOM303 · Contabilidad Gerencial · Segunda Solemne</div><h1>ABC: respuesta A completa</h1></header>
+    <main><table class="tbl "><thead><tr><th>Actividad</th><th>Tasa CIF</th><th>Producto 1</th><th>Producto 2</th></tr></thead><tbody><tr><td>Inspección</td><td><span class="fragment answer">$6.029,4</span></td><td><span class="fragment answer">$904.411,8</span></td><td><span class="fragment answer">$1.145.588,2</span></td></tr><tr><td>Energía</td><td><span class="fragment answer">$238,6</span></td><td><span class="fragment answer">$190.909,1</span></td><td><span class="fragment answer">$859.090,9</span></td></tr><tr><td>Almacenamiento</td><td><span class="fragment answer">$562,5</span></td><td><span class="fragment answer">$168.750,0</span></td><td><span class="fragment answer">$281.250,0</span></td></tr><tr><td>Total CIF asignado</td><td></td><td><span class="fragment answer">$1.264.070,9</span></td><td><span class="fragment answer">$2.285.929,1</span></td></tr></tbody></table><div class="callout fragment">Control: 1.264.070,9 + 2.285.929,1 = 3.550.000. Si cuadra con el total CIF, vas bien.</div></main>
+  </div>
+</section><section class="slide ">
+  <div class="slide-inner">
+    <header><div class="eyebrow">ICOM303 · Contabilidad Gerencial · Segunda Solemne</div><h1>ABC: pasar de CIF total a CIF unitario</h1></header>
+    <main>
+<div class="question">Ahora no basta con saber cuánto CIF absorbe cada producto en total. Necesitamos costo por unidad.</div>
+<div class="formula fragment">CIF unitario = CIF asignado al producto / Unidades producidas</div>
+<div class="two-col">
+  <div class="card ">Producto 1: 1.264.070,9 / 9.000 = <span class="fragment answer">$140,45</span></div>
+  <div class="card ">Producto 2: 2.285.929,1 / 10.300 = <span class="fragment answer">$221,93</span></div>
+</div>
+</main>
+  </div>
+</section><section class="slide ">
+  <div class="slide-inner">
+    <header><div class="eyebrow">ICOM303 · Contabilidad Gerencial · Segunda Solemne</div><h1>ABC: detalle unitario por actividad</h1></header>
+    <main><table class="tbl "><thead><tr><th>Actividad</th><th>Producto 1</th><th>Producto 2</th></tr></thead><tbody><tr><td>Inspección</td><td><span class="fragment answer">$100,49</span></td><td><span class="fragment answer">$111,22</span></td></tr><tr><td>Energía</td><td><span class="fragment answer">$21,21</span></td><td><span class="fragment answer">$83,41</span></td></tr><tr><td>Almacenamiento</td><td><span class="fragment answer">$18,75</span></td><td><span class="fragment answer">$27,31</span></td></tr><tr><td>CIF unitario total</td><td><span class="fragment answer">$140,45</span></td><td><span class="fragment answer">$221,93</span></td></tr></tbody></table><div class="callout fragment">Producto 2 usa mucha más energía, por eso su CIF unitario sube fuerte.</div></main>
+  </div>
+</section><section class="slide ">
+  <div class="slide-inner">
+    <header><div class="eyebrow">ICOM303 · Contabilidad Gerencial · Segunda Solemne</div><h1>ABC: respuesta B · costo unitario total</h1></header>
+    <main><table class="tbl "><thead><tr><th>Concepto</th><th>Producto 1</th><th>Producto 2</th></tr></thead><tbody><tr><td>Costo directo unitario</td><td><span class="fragment answer">$3.250,00</span></td><td><span class="fragment answer">$2.569,10</span></td></tr><tr><td>CIF unitario ABC</td><td><span class="fragment answer">$140,45</span></td><td><span class="fragment answer">$221,93</span></td></tr><tr><td>Costo unitario total</td><td><span class="fragment answer">$3.390,45</span></td><td><span class="fragment answer">$2.791,03</span></td></tr></tbody></table><div class="formula fragment">Costo unitario total = Costo directo unitario + Costo indirecto unitario</div></main>
+  </div>
+</section><section class="slide ">
+  <div class="slide-inner">
+    <header><div class="eyebrow">ICOM303 · Contabilidad Gerencial · Segunda Solemne</div><h1>ABC: cómo explicar el resultado</h1></header>
+    <main>
+<div class="talk-track fragment">Producto 1 tiene mayor costo directo, pero consume menos actividades indirectas por unidad.</div>
+<div class="talk-track fragment">Producto 2 tiene menor costo directo, pero absorbe más CIF, especialmente por energía.</div>
+<div class="talk-track fragment">ABC mejora la precisión porque conecta el costo con la causa del costo.</div>
+</main>
+  </div>
+</section><section class="slide ">
+  <div class="slide-inner">
+    <header><div class="eyebrow">ICOM303 · Contabilidad Gerencial · Segunda Solemne</div><h1>ABC: errores típicos</h1></header>
+    <main>
+<div class="error-list">
+  <div class="fragment">❌ Repartir los $3.550.000 solo por unidades producidas.</div>
+  <div class="fragment">❌ Confundir tasa CIF con costo unitario final.</div>
+  <div class="fragment">❌ Dividir el CIF total entre ambos productos sin usar drivers.</div>
+  <div class="fragment">✅ Siempre controlar que el CIF asignado total sume $3.550.000.</div>
+</div>
+</main>
+  </div>
+</section><section class="slide section-title">
+  <div class="slide-inner">
+    <header><div class="eyebrow">ICOM303 · Contabilidad Gerencial · Segunda Solemne</div><h1>Caso 2 · CVU monoproducto</h1></header>
+    <main>
+<div class="question">Fundiciones S.A. produce un solo producto. El objetivo es usar costo-volumen-utilidad para responder decisiones de equilibrio, utilidad y precio.</div>
+<div class="formula fragment">CVU trabaja con: Precio, Costo variable unitario, Margen de contribución unitario y Costos fijos.</div>
+</main>
+  </div>
+</section><section class="slide ">
+  <div class="slide-inner">
+    <header><div class="eyebrow">ICOM303 · Contabilidad Gerencial · Segunda Solemne</div><h1>CVU: estado de resultado inicial</h1></header>
+    <main><table class="tbl "><thead><tr><th>Concepto</th><th>Total</th></tr></thead><tbody><tr><td>Ventas</td><td><span class="fragment answer">$310.000</span></td></tr><tr><td>Costos variables producción</td><td><span class="fragment answer">$115.000</span></td></tr><tr><td>Costos variables venta</td><td><span class="fragment answer">$55.000</span></td></tr><tr><td>Margen de contribución</td><td><span class="fragment answer">$140.000</span></td></tr><tr><td>Costos fijos</td><td><span class="fragment answer">$95.000</span></td></tr><tr><td>Resultado operacional</td><td><span class="fragment answer">$45.000</span></td></tr></tbody></table><div class="callout fragment">El informe corresponde a 2.505 unidades.</div></main>
+  </div>
+</section><section class="slide ">
+  <div class="slide-inner">
+    <header><div class="eyebrow">ICOM303 · Contabilidad Gerencial · Segunda Solemne</div><h1>CVU: construir datos unitarios</h1></header>
+    <main>
+<div class="formula fragment">Precio unitario = Ventas / unidades</div>
+<div class="formula fragment">Costo variable unitario = Costos variables / unidades</div>
+<div class="three-col">
+  <div class="card ">Precio unitario<br><b><span class="fragment answer">$310.000 / 2.505 = $123,75</span></b></div>
+  <div class="card ">CV producción unitario<br><b><span class="fragment answer">$115.000 / 2.505 = $45,91</span></b></div>
+  <div class="card ">CV venta unitario<br><b><span class="fragment answer">$55.000 / 2.505 = $21,96</span></b></div>
+</div>
+</main>
+  </div>
+</section><section class="slide ">
+  <div class="slide-inner">
+    <header><div class="eyebrow">ICOM303 · Contabilidad Gerencial · Segunda Solemne</div><h1>CVU: margen de contribución unitario</h1></header>
+    <main>
+<div class="question">El margen de contribución es lo que queda para cubrir costos fijos y luego generar utilidad.</div>
+<div class="formula fragment">MCU = Precio unitario − Costo variable unitario</div>
+<div class="calc-board fragment">
+  MCU = 123,75 − (45,91 + 21,96) = <b>$55,89</b>
+</div>
+<div class="callout fragment">También se puede comprobar: $140.000 / 2.505 = $55,89.</div>
+</main>
+  </div>
+</section><section class="slide ">
+  <div class="slide-inner">
+    <header><div class="eyebrow">ICOM303 · Contabilidad Gerencial · Segunda Solemne</div><h1>Caso 2(a): punto de equilibrio en unidades</h1></header>
+    <main>
+<div class="question">¿Cuántas unidades debe vender para que la utilidad sea cero?</div>
+<div class="formula fragment">Q* = Costos fijos / MCU</div>
+<div class="big-calc fragment">Q* = 95.000 / 55,89 = <b>1.700 unidades</b></div>
+<div class="callout fragment">En equilibrio: Margen de contribución total = Costos fijos.</div>
+</main>
+  </div>
+</section><section class="slide ">
+  <div class="slide-inner">
+    <header><div class="eyebrow">ICOM303 · Contabilidad Gerencial · Segunda Solemne</div><h1>Caso 2(a): punto de equilibrio en dinero</h1></header>
+    <main>
+<div class="question">Ahora se pide el equilibrio expresado en ventas monetarias.</div>
+<div class="formula fragment">Razón MC = Margen de contribución / Ventas</div>
+<div class="formula fragment">S* = Costos fijos / Razón MC</div>
+<div class="big-calc fragment">Razón MC = 140.000 / 310.000 = 45,16%</div>
+<div class="big-calc fragment">S* = 95.000 / 0,4516 = <b>$210.357</b></div>
+</main>
+  </div>
+</section><section class="slide ">
+  <div class="slide-inner">
+    <header><div class="eyebrow">ICOM303 · Contabilidad Gerencial · Segunda Solemne</div><h1>Caso 2(a): respuesta final</h1></header>
+    <main><table class="tbl "><thead><tr><th>Medida</th><th>Resultado</th><th>Interpretación</th></tr></thead><tbody><tr><td>Punto de equilibrio en unidades</td><td><span class="fragment answer">1.700 unidades</span></td><td><span class="fragment answer">Desde aquí no pierde</span></td></tr><tr><td>Punto de equilibrio en dinero</td><td><span class="fragment answer">$210.357</span></td><td><span class="fragment answer">Ventas necesarias para cubrir CF</span></td></tr></tbody></table><div class="callout fragment">Si vendió 2.505 unidades, está por sobre el equilibrio.</div></main>
+  </div>
+</section><section class="slide ">
+  <div class="slide-inner">
+    <header><div class="eyebrow">ICOM303 · Contabilidad Gerencial · Segunda Solemne</div><h1>Caso 2(b): utilidad operacional deseada</h1></header>
+    <main>
+<div class="question">Se desea utilidad operacional de $90.000.</div>
+<div class="formula fragment">Q = (Costos fijos + Utilidad objetivo) / MCU</div>
+<div class="big-calc fragment">Q = (95.000 + 90.000) / 55,89</div>
+<div class="big-calc fragment">Q = <b>3.310 unidades</b></div>
+<div class="callout fragment">La utilidad objetivo se suma porque primero cubres costos fijos y después quieres ganar $90.000.</div>
+</main>
+  </div>
+</section><section class="slide ">
+  <div class="slide-inner">
+    <header><div class="eyebrow">ICOM303 · Contabilidad Gerencial · Segunda Solemne</div><h1>Caso 2(c): aumento de precio y variables 12%</h1></header>
+    <main>
+<div class="question">Si suben precio de venta y costos variables en 12%, cambia el margen unitario.</div>
+<div class="three-col">
+  <div class="card fragment">Precio nuevo<br><b>$123,75 × 1,12 = $138,60 ≈ $139</b></div>
+  <div class="card fragment">CV unitario viejo<br><b>$45,91 + $21,96 = $67,86</b></div>
+  <div class="card fragment">CV unitario nuevo<br><b>$67,86 × 1,12 = $76,01</b></div>
+</div>
+</main>
+  </div>
+</section><section class="slide ">
+  <div class="slide-inner">
+    <header><div class="eyebrow">ICOM303 · Contabilidad Gerencial · Segunda Solemne</div><h1>Caso 2(c): nuevo MCU</h1></header>
+    <main>
+<div class="formula fragment">MCU nuevo = Precio nuevo − CV unitario nuevo</div>
+<div class="big-calc fragment">MCU nuevo = 138,60 − 76,01 = <b>$62,59</b></div>
+<div class="callout fragment">Aunque ambos suben 12%, el margen aumenta porque el precio original era mayor que el costo variable original.</div>
+</main>
+  </div>
+</section><section class="slide ">
+  <div class="slide-inner">
+    <header><div class="eyebrow">ICOM303 · Contabilidad Gerencial · Segunda Solemne</div><h1>Caso 2(c): nueva cantidad de equilibrio</h1></header>
+    <main>
+<div class="formula fragment">Q* nuevo = Costos fijos / MCU nuevo</div>
+<div class="big-calc fragment">Q* nuevo = 95.000 / 62,59 = <b>1.518 unidades</b></div>
+<div class="warning fragment"><b>Nota de pauta:</b> la pauta muestra 1.250, pero con la fórmula estándar y el MCU de $62,59 el resultado es 1.518. El 1.250 sale de dividir 95.000 / 76,01, es decir, usando el costo variable como si fuera margen.</div>
+</main>
+  </div>
+</section><section class="slide ">
+  <div class="slide-inner">
+    <header><div class="eyebrow">ICOM303 · Contabilidad Gerencial · Segunda Solemne</div><h1>Caso 2(d): pedido adicional</h1></header>
+    <main>
+<div class="question">La empresa vende 2.505 unidades y recibe pedido extra de 495 unidades. Total: 3.000 unidades.</div>
+<div class="two-col">
+  <div class="card fragment">Unidades actuales<br><b>2.505</b></div>
+  <div class="card fragment">Unidades adicionales<br><b>495</b></div>
+</div>
+<div class="big-calc fragment">Total unidades = <b>3.000</b></div>
+</main>
+  </div>
+</section><section class="slide ">
+  <div class="slide-inner">
+    <header><div class="eyebrow">ICOM303 · Contabilidad Gerencial · Segunda Solemne</div><h1>Caso 2(d): utilidad objetivo con aumento de 15%</h1></header>
+    <main>
+<div class="question">La utilidad actual es $45.000. Se quiere que aumente 15%.</div>
+<div class="formula fragment">Utilidad nueva = Utilidad actual × 1,15</div>
+<div class="big-calc fragment">45.000 × 1,15 = <b>$51.750</b></div>
+<div class="formula fragment">MC requerido = Costos fijos + Utilidad nueva</div>
+<div class="big-calc fragment">95.000 + 51.750 = <b>$146.750</b></div>
+</main>
+  </div>
+</section><section class="slide ">
+  <div class="slide-inner">
+    <header><div class="eyebrow">ICOM303 · Contabilidad Gerencial · Segunda Solemne</div><h1>Caso 2(d): costos variables según pauta</h1></header>
+    <main>
+<div class="question">La pauta recalcula costos variables unitarios sobre 3.000 unidades.</div>
+<div class="two-col">
+  <div class="card fragment">CV producción unitario<br><b>115.000 / 3.000 = $38</b></div>
+  <div class="card fragment">CV venta unitario con aumento<br><b>(55.000 + 6.000) / 3.000 = $20</b></div>
+</div>
+<div class="big-calc fragment">CV total unitario usado ≈ <b>$58</b></div>
+</main>
+  </div>
+</section><section class="slide ">
+  <div class="slide-inner">
+    <header><div class="eyebrow">ICOM303 · Contabilidad Gerencial · Segunda Solemne</div><h1>Caso 2(d): precio requerido</h1></header>
+    <main>
+<div class="question">El precio debe cubrir el costo variable unitario y generar el margen requerido.</div>
+<div class="formula fragment">Precio = [MC requerido + (CV unitario × unidades)] / unidades</div>
+<div class="big-calc fragment">Precio = [146.750 + (58 × 3.000)] / 3.000</div>
+<div class="big-calc fragment">Precio ≈ <b>$108</b></div>
+<div class="callout fragment">Este es el precio unitario que aparece en la pauta.</div>
+</main>
+  </div>
+</section><section class="slide ">
+  <div class="slide-inner">
+    <header><div class="eyebrow">ICOM303 · Contabilidad Gerencial · Segunda Solemne</div><h1>CVU monoproducto: resumen para la prueba</h1></header>
+    <main><table class="tbl "><thead><tr><th>Pregunta</th><th>Clave</th><th>Resultado</th></tr></thead><tbody><tr><td>a) PE unidades</td><td>CF / MCU</td><td><span class="fragment answer">1.700 unidades</span></td></tr><tr><td>a) PE dinero</td><td>CF / Razón MC</td><td><span class="fragment answer">$210.357</span></td></tr><tr><td>b) Utilidad 90.000</td><td>(CF + U) / MCU</td><td><span class="fragment answer">3.310 unidades</span></td></tr><tr><td>c) Aumento 12%</td><td>CF / MCU nuevo</td><td><span class="fragment answer">1.518 estándar / 1.250 pauta</span></td></tr><tr><td>d) Precio pedido</td><td>Cubrir CV + MC requerido</td><td><span class="fragment answer">$108</span></td></tr></tbody></table></main>
+  </div>
+</section><section class="slide ">
+  <div class="slide-inner">
+    <header><div class="eyebrow">ICOM303 · Contabilidad Gerencial · Segunda Solemne</div><h1>CVU: errores típicos</h1></header>
+    <main>
+<div class="error-list">
+  <div class="fragment">❌ Usar ventas totales como si fueran precio unitario.</div>
+  <div class="fragment">❌ Olvidar dividir por 2.505 unidades para construir datos unitarios.</div>
+  <div class="fragment">❌ Confundir costo variable unitario con margen de contribución unitario.</div>
+  <div class="fragment">✅ Antes de resolver, escribe: P, CVu, MCU, CF.</div>
+</div>
+</main>
+  </div>
+</section><section class="slide section-title">
+  <div class="slide-inner">
+    <header><div class="eyebrow">ICOM303 · Contabilidad Gerencial · Segunda Solemne</div><h1>Caso 3 · CVU multiproducto</h1></header>
+    <main>
+<div class="question">Dulce Alianza vende Tortas y Kuchenes. Cuando hay más de un producto, el equilibrio depende de la mezcla de ventas.</div>
+<div class="formula fragment">MCU ponderado = suma de cada MCU × participación en la mezcla</div>
+</main>
+  </div>
+</section><section class="slide ">
+  <div class="slide-inner">
+    <header><div class="eyebrow">ICOM303 · Contabilidad Gerencial · Segunda Solemne</div><h1>CVU multiproducto: datos base</h1></header>
+    <main><table class="tbl "><thead><tr><th>Producto</th><th>Precio</th><th>Costo variable</th><th>Mix</th></tr></thead><tbody><tr><td>Tortas</td><td><span class="fragment answer">$20.000</span></td><td><span class="fragment answer">$10.000</span></td><td><span class="fragment answer">60%</span></td></tr><tr><td>Kuchenes</td><td><span class="fragment answer">$12.000</span></td><td><span class="fragment answer">$6.000</span></td><td><span class="fragment answer">40%</span></td></tr><tr><td>Costos fijos</td><td><span class="fragment answer">$6.000.000</span></td><td></td><td></td></tr></tbody></table><div class="callout fragment">El mix indica de cada 100 unidades vendidas, 60 son tortas y 40 son kuchenes.</div></main>
+  </div>
+</section><section class="slide ">
+  <div class="slide-inner">
+    <header><div class="eyebrow">ICOM303 · Contabilidad Gerencial · Segunda Solemne</div><h1>Caso 3(a): margen unitario de cada producto</h1></header>
+    <main>
+<div class="formula fragment">MCU = Precio − Costo variable</div>
+<div class="two-col">
+  <div class="card ">Tortas: 20.000 − 10.000 = <span class="fragment answer">$10.000</span></div>
+  <div class="card ">Kuchenes: 12.000 − 6.000 = <span class="fragment answer">$6.000</span></div>
+</div>
+</main>
+  </div>
+</section><section class="slide ">
+  <div class="slide-inner">
+    <header><div class="eyebrow">ICOM303 · Contabilidad Gerencial · Segunda Solemne</div><h1>Caso 3(a): margen ponderado</h1></header>
+    <main>
+<div class="formula fragment">MC ponderado = MCU × Mix</div>
+<div class="two-col">
+  <div class="card ">Tortas: 10.000 × 60% = <span class="fragment answer">$6.000</span></div>
+  <div class="card ">Kuchenes: 6.000 × 40% = <span class="fragment answer">$2.400</span></div>
+</div>
+<div class="big-calc fragment">MCU ponderado total = 6.000 + 2.400 = <b>$8.400</b></div>
+</main>
+  </div>
+</section><section class="slide ">
+  <div class="slide-inner">
+    <header><div class="eyebrow">ICOM303 · Contabilidad Gerencial · Segunda Solemne</div><h1>Caso 3(a): tabla final</h1></header>
+    <main><table class="tbl "><thead><tr><th>Producto</th><th>Precio</th><th>CV</th><th>MCU</th><th>Mix</th><th>MC ponderado</th></tr></thead><tbody><tr><td>Tortas</td><td><span class="fragment answer">$20.000</span></td><td><span class="fragment answer">$10.000</span></td><td><span class="fragment answer">$10.000</span></td><td><span class="fragment answer">60%</span></td><td><span class="fragment answer">$6.000</span></td></tr><tr><td>Kuchenes</td><td><span class="fragment answer">$12.000</span></td><td><span class="fragment answer">$6.000</span></td><td><span class="fragment answer">$6.000</span></td><td><span class="fragment answer">40%</span></td><td><span class="fragment answer">$2.400</span></td></tr><tr><td>Total</td><td></td><td></td><td></td><td></td><td><span class="fragment answer">$8.400</span></td></tr></tbody></table></main>
+  </div>
+</section><section class="slide ">
+  <div class="slide-inner">
+    <header><div class="eyebrow">ICOM303 · Contabilidad Gerencial · Segunda Solemne</div><h1>Caso 3(b): punto de equilibrio global</h1></header>
+    <main>
+<div class="question">El equilibrio total se calcula como unidades de la mezcla completa.</div>
+<div class="formula fragment">PE global = Costos fijos / MCU ponderado</div>
+<div class="big-calc fragment">PE global = 6.000.000 / 8.400 = <b>714,29 unidades</b></div>
+<div class="callout fragment">No son solo tortas ni solo kuchenes: son unidades totales respetando el mix 60/40.</div>
+</main>
+  </div>
+</section><section class="slide ">
+  <div class="slide-inner">
+    <header><div class="eyebrow">ICOM303 · Contabilidad Gerencial · Segunda Solemne</div><h1>Caso 3(c): separar por producto</h1></header>
+    <main>
+<div class="formula fragment">Unidades por producto = PE global × Mix</div>
+<div class="two-col">
+  <div class="card ">Tortas: 714,29 × 60% = <span class="fragment answer">428,57 unidades</span></div>
+  <div class="card ">Kuchenes: 714,29 × 40% = <span class="fragment answer">285,71 unidades</span></div>
+</div>
+<div class="callout fragment">Si se redondea para operar, puede usarse 429 tortas y 286 kuchenes aprox.</div>
+</main>
+  </div>
+</section><section class="slide ">
+  <div class="slide-inner">
+    <header><div class="eyebrow">ICOM303 · Contabilidad Gerencial · Segunda Solemne</div><h1>CVU multiproducto: por qué funciona</h1></header>
+    <main>
+<div class="talk-track fragment">El negocio no vende un producto único, vende una combinación.</div>
+<div class="talk-track fragment">Cada unidad promedio de la mezcla aporta $8.400 para cubrir costos fijos.</div>
+<div class="talk-track fragment">Por eso se divide el costo fijo por el MCU ponderado, no por el MCU de un producto aislado.</div>
+</main>
+  </div>
+</section><section class="slide ">
+  <div class="slide-inner">
+    <header><div class="eyebrow">ICOM303 · Contabilidad Gerencial · Segunda Solemne</div><h1>CVU multiproducto: resumen</h1></header>
+    <main><table class="tbl "><thead><tr><th>Pregunta</th><th>Fórmula</th><th>Resultado</th></tr></thead><tbody><tr><td>a) MCU ponderado</td><td>Σ(MCU × mix)</td><td><span class="fragment answer">$8.400</span></td></tr><tr><td>b) PE global</td><td>CF / MCU ponderado</td><td><span class="fragment answer">714,29 unidades</span></td></tr><tr><td>c) Tortas</td><td>714,29 × 60%</td><td><span class="fragment answer">428,57</span></td></tr><tr><td>c) Kuchenes</td><td>714,29 × 40%</td><td><span class="fragment answer">285,71</span></td></tr></tbody></table></main>
+  </div>
+</section><section class="slide ">
+  <div class="slide-inner">
+    <header><div class="eyebrow">ICOM303 · Contabilidad Gerencial · Segunda Solemne</div><h1>CVU multiproducto: errores típicos</h1></header>
+    <main>
+<div class="error-list">
+  <div class="fragment">❌ Promediar precios sin considerar el mix.</div>
+  <div class="fragment">❌ Dividir los costos fijos por $10.000 o $6.000 directamente.</div>
+  <div class="fragment">❌ Calcular 714,29 y decir que son solo tortas.</div>
+  <div class="fragment">✅ Siempre escribir primero: MCU, mix, MCU ponderado.</div>
+</div>
+</main>
+  </div>
+</section><section class="slide section-title">
+  <div class="slide-inner">
+    <header><div class="eyebrow">ICOM303 · Contabilidad Gerencial · Segunda Solemne</div><h1>Ítem IV · Presupuesto cíclico</h1></header>
+    <main>
+<div class="question">Este ítem vale 10 puntos. Son respuestas breves, técnicas y directas.</div>
+<div class="formula fragment">Regla: 1 a 3 líneas, vocabulario técnico, sin extenderse de más.</div>
+</main>
+  </div>
+</section><section class="slide ">
+  <div class="slide-inner">
+    <header><div class="eyebrow">ICOM303 · Contabilidad Gerencial · Segunda Solemne</div><h1>Pregunta 1: ¿qué es un presupuesto cíclico?</h1></header>
+    <main>
+<div class="blank-question">Respuesta: <span class="longblank"></span></div>
+<div class="answer-box fragment">Es un presupuesto que se elabora y revisa por ciclos o períodos definidos: mensuales, trimestrales, semestrales o estacionales.</div>
+<div class="callout fragment">Palabras clave: ciclos, períodos definidos, revisión.</div>
+</main>
+  </div>
+</section><section class="slide ">
+  <div class="slide-inner">
+    <header><div class="eyebrow">ICOM303 · Contabilidad Gerencial · Segunda Solemne</div><h1>Pregunta 2: dos características principales</h1></header>
+    <main>
+<div class="blank-question">Característica 1: <span class="longblank"></span></div>
+<div class="answer-box fragment">Se divide en ciclos o períodos específicos: mensual, trimestral, semestral o estacional.</div>
+<div class="blank-question">Característica 2: <span class="longblank"></span></div>
+<div class="answer-box fragment">Permite ajustes y revisiones periódicas según los resultados del ciclo anterior.</div>
+</main>
+  </div>
+</section><section class="slide ">
+  <div class="slide-inner">
+    <header><div class="eyebrow">ICOM303 · Contabilidad Gerencial · Segunda Solemne</div><h1>Pregunta 3: empresas donde es más útil</h1></header>
+    <main>
+<div class="blank-question">Tipo de empresa: <span class="longblank"></span></div>
+<div class="answer-box fragment">Empresas con actividad estacional o cíclica, donde ventas, producción o costos varían según el período.</div>
+<div class="blank-question">Ejemplo: <span class="longblank"></span></div>
+<div class="answer-box fragment">Heladerías, turismo, agricultura, jugueterías, ropa de temporada o panaderías en fechas especiales.</div>
+</main>
+  </div>
+</section><section class="slide ">
+  <div class="slide-inner">
+    <header><div class="eyebrow">ICOM303 · Contabilidad Gerencial · Segunda Solemne</div><h1>Pregunta 4: ventaja frente al presupuesto anual fijo</h1></header>
+    <main>
+<div class="blank-question">Ventaja: <span class="longblank"></span></div>
+<div class="answer-box fragment">Permite mayor flexibilidad y precisión al adaptarse a cambios estacionales del negocio, facilitando decisiones oportunas.</div>
+<div class="callout fragment">Idea clave: se adapta mejor que un presupuesto anual rígido.</div>
+</main>
+  </div>
+</section><section class="slide ">
+  <div class="slide-inner">
+    <header><div class="eyebrow">ICOM303 · Contabilidad Gerencial · Segunda Solemne</div><h1>Pregunta 5: desventaja o limitación</h1></header>
+    <main>
+<div class="blank-question">Desventaja: <span class="longblank"></span></div>
+<div class="answer-box fragment">Requiere mayor tiempo y trabajo administrativo porque debe revisarse y actualizarse en cada ciclo.</div>
+<div class="callout fragment">Idea clave: más control, pero también más carga de gestión.</div>
+</main>
+  </div>
+</section><section class="slide ">
+  <div class="slide-inner">
+    <header><div class="eyebrow">ICOM303 · Contabilidad Gerencial · Segunda Solemne</div><h1>Presupuesto cíclico: resumen de 10 puntos</h1></header>
+    <main><table class="tbl "><thead><tr><th>N°</th><th>Idea central</th><th>Palabras clave</th></tr></thead><tbody><tr><td>1</td><td><span class="fragment answer">Definición</span></td><td><span class="fragment answer">ciclos, períodos, revisión</span></td></tr><tr><td>2</td><td><span class="fragment answer">Características</span></td><td><span class="fragment answer">períodos + ajustes</span></td></tr><tr><td>3</td><td><span class="fragment answer">Empresas útiles</span></td><td><span class="fragment answer">estacionalidad</span></td></tr><tr><td>4</td><td><span class="fragment answer">Ventaja</span></td><td><span class="fragment answer">flexibilidad y precisión</span></td></tr><tr><td>5</td><td><span class="fragment answer">Desventaja</span></td><td><span class="fragment answer">más tiempo administrativo</span></td></tr></tbody></table></main>
+  </div>
+</section><section class="slide ">
+  <div class="slide-inner">
+    <header><div class="eyebrow">ICOM303 · Contabilidad Gerencial · Segunda Solemne</div><h1>Estrategia de resolución en 90 minutos</h1></header>
+    <main>
+<div class="timeline">
+  <div class="titem fragment"><b>0-25 min</b><span>ABC: ordenar drivers, tasas, asignaciones, unitarios.</span></div>
+  <div class="titem fragment"><b>25-55 min</b><span>CVU monoproducto: construir unitarios y resolver a-d.</span></div>
+  <div class="titem fragment"><b>55-75 min</b><span>CVU multiproducto: MCU ponderado, PE global y mix.</span></div>
+  <div class="titem fragment"><b>75-85 min</b><span>Presupuesto: respuestas breves.</span></div>
+  <div class="titem fragment"><b>85-90 min</b><span>Revisión de sumas, signos y redondeos.</span></div>
+</div>
+</main>
+  </div>
+</section><section class="slide ">
+  <div class="slide-inner">
+    <header><div class="eyebrow">ICOM303 · Contabilidad Gerencial · Segunda Solemne</div><h1>Checklist antes de entregar</h1></header>
+    <main>
+<div class="checklist">
+  <label class="fragment"><input type="checkbox"> En ABC, el total CIF asignado suma $3.550.000.</label>
+  <label class="fragment"><input type="checkbox"> En ABC, separé costo directo unitario y CIF unitario.</label>
+  <label class="fragment"><input type="checkbox"> En CVU, calculé precio, CVu y MCU antes de aplicar fórmulas.</label>
+  <label class="fragment"><input type="checkbox"> En multiproducto, usé MCU ponderado y no MCU simple.</label>
+  <label class="fragment"><input type="checkbox"> En presupuesto, respondí en 1 a 3 líneas.</label>
+</div>
+</main>
+  </div>
+</section><section class="slide ">
+  <div class="slide-inner">
+    <header><div class="eyebrow">ICOM303 · Contabilidad Gerencial · Segunda Solemne</div><h1>Plantilla mental rápida</h1></header>
+    <main>
+<div class="three-col">
+  <div class="card fragment"><h3>ABC</h3><p>Tasa = Costo / Driver<br>CIF = Tasa × Uso<br>Costo total = Directo + Indirecto</p></div>
+  <div class="card fragment"><h3>CVU Mono</h3><p>MCU = P − CVu<br>PE = CF / MCU<br>Q utilidad = (CF + U) / MCU</p></div>
+  <div class="card fragment"><h3>CVU Multi</h3><p>MC ponderado = Σ(MCU × mix)<br>PE global = CF / MC ponderado</p></div>
+</div>
+</main>
+  </div>
+</section><section class="slide cover">
+  <div class="slide-inner">
+    <header><div class="eyebrow">ICOM303 · Contabilidad Gerencial · Segunda Solemne</div><h1>Cierre: lo que debes poder explicar</h1></header>
+    <main>
+<div class="talk-track fragment">De dónde sale cada número.</div>
+<div class="talk-track fragment">Por qué se divide por el driver en ABC.</div>
+<div class="talk-track fragment">Por qué el margen de contribución cubre costos fijos.</div>
+<div class="talk-track fragment">Por qué en multiproducto manda la mezcla de ventas.</div>
+<div class="final-badge fragment">Listo para resolver la solemne paso a paso.</div>
+</main>
+  </div>
+</section>
+</div>
+<div class="controls">
+  <button onclick="prevSlide()">←</button>
+  <span class="counter" id="counter"></span>
+  <button onclick="nextAction()">clic / revelar →</button>
+</div>
+<script>
+const slides = [...document.querySelectorAll('.slide')];
+let current = 0;
+function setActive(i) {
+  slides[current].classList.remove('active');
+  current = Math.max(0, Math.min(i, slides.length-1));
+  slides[current].classList.add('active');
+  updateUI();
+}
+function updateUI() {
+  document.getElementById('counter').textContent = `${current+1} / ${slides.length}`;
+  document.getElementById('progress').style.width = `${((current+1)/slides.length)*100}%`;
+}
+function nextAction() {
+  const hidden = slides[current].querySelector('.fragment:not(.visible)');
+  if (hidden) { hidden.classList.add('visible'); return; }
+  if (current < slides.length-1) setActive(current+1);
+}
+function prevSlide() {
+  const visible = [...slides[current].querySelectorAll('.fragment.visible')];
+  if (visible.length) { visible[visible.length-1].classList.remove('visible'); return; }
+  if (current > 0) setActive(current-1);
+}
+document.addEventListener('keydown', e => {
+  if (['ArrowRight',' ','PageDown','Enter'].includes(e.key)) { e.preventDefault(); nextAction(); }
+  if (['ArrowLeft','PageUp','Backspace'].includes(e.key)) { e.preventDefault(); prevSlide(); }
+  if (e.key === 'Home') setActive(0);
+  if (e.key === 'End') setActive(slides.length-1);
+});
+document.addEventListener('click', e => {
+  if (e.target.closest('button') || e.target.closest('input')) return;
+  nextAction();
+});
+slides[0].classList.add('active');
+updateUI();
+</script>
+</body>
+</html>
